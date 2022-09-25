@@ -12,7 +12,7 @@ const ProductScreen = ({ history }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [qty, setQty] = useState(0);
+	const [qty, setQty] = useState(1);
 
 	const productDetails = useSelector((state) => state.productDetails);
 
@@ -22,7 +22,7 @@ const ProductScreen = ({ history }) => {
 		dispatch(listProductDetails(id));
 	}, [dispatch, id]);
 
-	const addToCardHandler = () => {
+	const addToCartHandler = () => {
 		navigate(`/cart/${id}?qty=${qty}`);
 	};
 
@@ -102,7 +102,7 @@ const ProductScreen = ({ history }) => {
 									<Button
 										disabled={product.countInStock === 0}
 										type="button"
-										onClick={addToCardHandler}>
+										onClick={addToCartHandler}>
 										Add to Cart
 									</Button>
 								</ListGroup.Item>
