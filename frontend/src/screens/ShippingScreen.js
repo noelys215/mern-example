@@ -1,22 +1,33 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer.component';
-
-const submitHandler = (e) => {
-	e.preventDefault();
-};
+import { saveShippingAddress } from '../actions/cartActions';
+import CheckoutSteps from '../components/CheckoutSteps.component';
 
 const ShippingScreen = () => {
 	const navigate = useNavigate();
-	const [address, setAddress] = useState('');
-	const [city, setCity] = useState('');
-	const [postal, setPostal] = useState('');
-	const [country, setCountry] = useState('');
+
+	const cart = useSelector((state) => state.cart);
+	const { shippingAddress } = cart;
+
+	const [address, setAddress] = useState(shippingAddress.address);
+	const [city, setCity] = useState(shippingAddress.city);
+	const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
+	const [country, setCountry] = useState(shippingAddress.country);
+
+	const dispatch = useDispatch();
+
+	const submitHandler = (e) => {
+		e.preventDefault();
+		dispatch(saveShippingAddress({ address, city, postalCode, country }));
+		navigate('/payment');
+	};
 
 	return (
 		<FormContainer>
+			<CheckoutSteps step1 step2 />
 			<h1>Shipping</h1>
 			<Form onSubmit={submitHandler}>
 				{/* Address */}
@@ -42,21 +53,21 @@ const ShippingScreen = () => {
 					/>
 				</Form.Group>
 				{/* Postal Code */}
-				<Form.Group controlId="postal">
+				<Form.Group controlId="postalCode">
 					<Form.Label>Postal</Form.Label>
 					<Form.Control
 						type="number"
-						placeholder="Enter Postal"
-						value={postal}
+						placeholder="Enter Postal Code"
+						value={postalCode}
 						required
-						onChange={(e) => setPostal(e.target.value)}
+						onChange={(e) => setPostalCode(e.target.value)}
 					/>
 				</Form.Group>
 				{/* Country Code */}
 				<Form.Group controlId="country">
 					<Form.Label>Country</Form.Label>
 					<Form.Control
-						type="number"
+						type="text"
 						placeholder="Enter Country"
 						value={country}
 						required
