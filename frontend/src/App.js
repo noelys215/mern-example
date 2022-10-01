@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer.component';
 import { Container } from 'react-bootstrap';
 import HomeScreen from './screens/HomeScreen';
-import ProductScreen from './screens/ProductScreen';
+import ProductScreen from './screens/ProductListScreen';
 import CartScreen from './screens/CartScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -14,6 +14,7 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import ProductListScreen from './screens/ProductListScreen';
 
 const App = () => {
 	return (
@@ -36,6 +37,7 @@ const App = () => {
 						</Route>
 						<Route path="/admin/userlist" element={<UserListScreen />} />
 						<Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
+						<Route path="/admin/productlist" element={<ProductListScreen />} />
 						<Route path="/" element={<HomeScreen />} exact />
 					</Routes>
 				</Container>
