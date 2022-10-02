@@ -18,7 +18,7 @@ const HomeScreen = () => {
 	return (
 		<>
 			<h1>Latest Products</h1>
-			{products.length === 0 ? (
+			{products?.length === 0 ? (
 				<Loader />
 			) : error ? (
 				<Message variant="danger" message={error} />
