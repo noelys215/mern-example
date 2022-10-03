@@ -42,10 +42,23 @@ const App = () => {
 							<Route path=":id" element={<CartScreen />} />
 							<Route path="" element={<CartScreen />} />
 						</Route> */}
+
+						<Route
+							path="/admin/productlist/:pageNumber"
+							element={<ProductListScreen />}
+							exact
+						/>
+
 						<Route path="/admin/userlist" element={<UserListScreen />} />
 						<Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
 						<Route path="/admin/orderlist" element={<OrderListScreen />} />
 						<Route path="/admin/productlist" element={<ProductListScreen />} exact />
+						<Route path="/page/:pageNumber" element={<HomeScreen />} exact />
+						<Route
+							path="/search/:keyword/page/:pageNumber"
+							element={<HomeScreen />}
+							exact
+						/>
 						<Route path="/admin/product/:id/edit" element={<ProductEditScreen />} />
 					</Routes>
 				</Container>
