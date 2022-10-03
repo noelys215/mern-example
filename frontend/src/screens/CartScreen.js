@@ -1,38 +1,32 @@
-import { useEffect } from 'react';
-import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Message from '../components/Message';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
+import Message from '../components/Message';
 import { addToCart, removeFromCart } from '../actions/cartActions';
 
-const CartScreen = ({ match, location }) => {
-	const { id } = useParams();
-	const navigate = useNavigate();
-	const qty = new URLSearchParams(useLocation().search).get('qty');
+const CartScreen = ({ match, location, history }) => {
+	const productId = match.params.id;
+
+	const qty = location.search ? Number(location.search.split('=')[1]) : 1;
+
 	const dispatch = useDispatch();
 
 	const cart = useSelector((state) => state.cart);
 	const { cartItems } = cart;
-	const userLogin = useSelector((state) => state.userLogin);
-	const { userInfo } = userLogin;
 
 	useEffect(() => {
-		if (id) {
-			dispatch(addToCart(id, qty));
+		if (productId) {
+			dispatch(addToCart(productId, qty));
 		}
-	}, [dispatch, id, qty]);
+	}, [dispatch, productId, qty]);
 
 	const removeFromCartHandler = (id) => {
 		dispatch(removeFromCart(id));
-		navigate('/cart');
 	};
 
 	const checkoutHandler = () => {
-		if (userInfo) {
-			navigate('/shipping');
-		} else {
-			navigate('/login');
-		}
+		history.push('/login?redirect=shipping');
 	};
 
 	return (
@@ -41,7 +35,7 @@ const CartScreen = ({ match, location }) => {
 				<h1>Shopping Cart</h1>
 				{cartItems.length === 0 ? (
 					<Message>
-						Your Cart Is Empty... <Link to={'/'}>Go Back</Link>
+						Your cart is empty <Link to="/">Go Back</Link>
 					</Message>
 				) : (
 					<ListGroup variant="flush">
@@ -55,7 +49,7 @@ const CartScreen = ({ match, location }) => {
 										<Link to={`/product/${item.product}`}>{item.name}</Link>
 									</Col>
 									<Col md={2}>${item.price}</Col>
-									<Col md={2} xs={6}>
+									<Col md={2}>
 										<Form.Control
 											as="select"
 											value={item.qty}
@@ -71,12 +65,12 @@ const CartScreen = ({ match, location }) => {
 											))}
 										</Form.Control>
 									</Col>
-									<Col md={2} xs={6}>
+									<Col md={2}>
 										<Button
 											type="button"
 											variant="light"
 											onClick={() => removeFromCartHandler(item.product)}>
-											<i className="fas fa-trash" />
+											<i className="fas fa-trash"></i>
 										</Button>
 									</Col>
 								</Row>
@@ -101,10 +95,10 @@ const CartScreen = ({ match, location }) => {
 						<ListGroup.Item>
 							<Button
 								type="button"
-								style={{ width: '100%' }}
-								disabled={!cartItems}
+								className="btn-block"
+								disabled={cartItems.length === 0}
 								onClick={checkoutHandler}>
-								Proceed to Checkout
+								Proceed To Checkout
 							</Button>
 						</ListGroup.Item>
 					</ListGroup>

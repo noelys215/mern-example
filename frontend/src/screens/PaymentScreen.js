@@ -1,19 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import FormContainer from '../components/FormContainer.component';
-import CheckoutSteps from '../components/CheckoutSteps.component';
+import FormContainer from '../components/FormContainer';
+import CheckoutSteps from '../components/CheckoutSteps';
 import { savePaymentMethod } from '../actions/cartActions';
 
-const PaymentScreen = () => {
-	const navigate = useNavigate();
-
+const PaymentScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
 	const { shippingAddress } = cart;
 
-	if (!shippingAddress) {
-		navigate('/shipping');
+	if (!shippingAddress.address) {
+		history.push('/shipping');
 	}
 
 	const [paymentMethod, setPaymentMethod] = useState('PayPal');
@@ -23,7 +20,7 @@ const PaymentScreen = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch(savePaymentMethod(paymentMethod));
-		navigate('/placeorder');
+		history.push('/placeorder');
 	};
 
 	return (
@@ -40,26 +37,20 @@ const PaymentScreen = () => {
 							id="PayPal"
 							name="paymentMethod"
 							value="PayPal"
-							onChange={(e) => setPaymentMethod(e.target.value)}
 							checked
-							style={{ marginBottom: '1rem' }}
-						/>
-						<Form.Check
-							type="radio"
-							label="Stripe or Credit Card"
-							id="Stripe"
-							name="paymentMethod"
-							value="Stripe"
-							disabled
-							onChange={(e) => setPaymentMethod(e.target.value)}
-						/>
+							onChange={(e) => setPaymentMethod(e.target.value)}></Form.Check>
+						{/* <Form.Check
+              type='radio'
+              label='Stripe'
+              id='Stripe'
+              name='paymentMethod'
+              value='Stripe'
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            ></Form.Check> */}
 					</Col>
 				</Form.Group>
 
-				<Button
-					type="submit"
-					variant="primary"
-					style={{ width: '100%', marginTop: '1rem' }}>
+				<Button type="submit" variant="primary">
 					Continue
 				</Button>
 			</Form>
